@@ -5,11 +5,24 @@ export type TKvStore = {
 }
 
 export type TCloudflareAPI = {
-  CF_EMAIL: string
-  CF_KEY: string
-  CF_ZONE: string
+  email: string
+  key: string
+  zone: string
 }
 
 export type TKvStoreEnv = {
   HTML_CACHE_VERSION: string
+}
+
+export type TResponseOptions = {
+  purge: boolean
+  cache: boolean
+  bypassCookies: string[]
+}
+
+export type TCachedResponse = {
+  response: Response | null
+  cacheVer: number | null
+  status: string
+  bypassCache: boolean
 }

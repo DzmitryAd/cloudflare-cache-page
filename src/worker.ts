@@ -1,48 +1,21 @@
-import { kvEnvStore } from "./worker-env-store"
-import { TCloudflareAPI, TKvStoreEnv } from "./types"
-
-// IMPORTANT: Either A Key/Value Namespace must be bound to this worker script
-// using the variable name EDGE_CACHE. or the API parameters below should be
-// configured. KV is recommended if possible since it can purge just the HTML
-// instead of the full cache.
-
-// API settings if KV isn't being used
-const CF_EMAIL = "" // From https://dash.cloudflare.com/profile
-const CF_KEY = "" // Global API Key from https://dash.cloudflare.com/profile
-const CF_ZONE = "" // "Zone ID" from the API section of the dashboard overview page https://dash.cloudflare.com/
-
-const CLOUDFLARE_API: TCloudflareAPI = { CF_EMAIL, CF_KEY, CF_ZONE }
-const DEFAULT_BYPASS_COOKIES = ["wp-", "wordpress", "comment_", "woocommerce_"]
-const CACHE_HEADERS = ["Cache-Control", "Expires", "Pragma"]
-;((global as unknown) as ServiceWorkerGlobalScope).addEventListener("fetch", event => {
-  ;(event as any).passThroughOnException() // CloudFlare specifig
-  event.respondWith(try_catch_handler(event))
-})
-
-const try_catch_handler = async (event: FetchEvent) => {
-  try {
-    const response = await handle(event)
-    return response
-  } catch (err) {
-    return new Response(err.stack || err)
-  }
-}
+import { cacheResponse, getCachedResponse, purgeCache, updateCache } from "./caching"
+import { CLOUDFLARE_API, EDGE_CACHE } from "./const"
+import { getResponseOptions, shouldBypassEdgeCache } from "./util"
 
 const handle = async (event: FetchEvent) => {
   const request = event.request
   let upstreamCache = request.headers.get("x-HTML-Edge-Cache")
-  const env: TKvStoreEnv = await kvEnvStore.getEnv()
 
   // Only process requests if KV store is set up and there is no
   // HTML edge cache in front of this worker (only the outermost cache
   // should handle HTML caching in case there are varying levels of support).
   let configured = false
-  if (env) {
+  if (typeof EDGE_CACHE !== "undefined") {
     configured = true
   } else if (
-    CLOUDFLARE_API.CF_EMAIL.length &&
-    CLOUDFLARE_API.CF_KEY.length &&
-    CLOUDFLARE_API.CF_ZONE.length
+    CLOUDFLARE_API.email.length &&
+    CLOUDFLARE_API.key.length &&
+    CLOUDFLARE_API.zone.length
   ) {
     configured = true
   }
@@ -68,12 +41,12 @@ const handle = async (event: FetchEvent) => {
 const processRequest = async (originalRequest: Request, event: FetchEvent) => {
   let cfCacheStatus = null
   const accept = originalRequest.headers.get("Accept")
-  const isHTML = accept && accept.indexOf("text/html") >= 0
+  const isHTML = accept && accept.includes("text/html")
   let { response, cacheVer, status, bypassCache } = await getCachedResponse(originalRequest)
 
   if (response === null) {
     // Clone the request, add the edge-cache header and send it through.
-    let request = new Request(originalRequest)
+    const request = new Request(originalRequest)
     request.headers.set("x-HTML-Edge-Cache", "supports=cache|purgeall|bypass-cookies")
     response = await fetch(request)
 
@@ -131,61 +104,15 @@ const processRequest = async (originalRequest: Request, event: FetchEvent) => {
   return response
 }
 
-const getCachedResponse = async (request: Request) => {
-  let response = null
-  let cacheVer = null
-  let bypassCache = false
-  let status = "Miss"
-
-  // Only check for HTML GET requests (saves on reading from KV unnecessarily)
-  // and not when there are cache-control headers on the request (refresh)
-  const accept = request.headers.get("Accept")
-  const cacheControl = request.headers.get("Cache-Control")
-  let noCache = false
-  if (cacheControl && cacheControl.indexOf("no-cache") !== -1) {
-    noCache = true
-    status = "Bypass for Reload"
+const try_catch_handler = async (event: FetchEvent) => {
+  try {
+    const response = await handle(event)
+    return response
+  } catch (err) {
+    return new Response(err.stack || err)
   }
-  if (!noCache && request.method === "GET" && accept && accept.indexOf("text/html") >= 0) {
-    // Build the versioned URL for checking the cache
-    cacheVer = await GetCurrentCacheVersion(cacheVer)
-    const cacheKeyRequest = GenerateCacheRequest(request, cacheVer)
-
-    // See if there is a request match in the cache
-    try {
-      let cache = caches.default
-      let cachedResponse = await cache.match(cacheKeyRequest)
-      if (cachedResponse) {
-        // Copy Response object so that we can edit headers.
-        cachedResponse = new Response(cachedResponse.body, cachedResponse)
-
-        // Check to see if the response needs to be bypassed because of a cookie
-        bypassCache = shouldBypassEdgeCache(request, cachedResponse)
-
-        // Copy the original cache headers back and clean up any control headers
-        if (bypassCache) {
-          status = "Bypass Cookie"
-        } else {
-          status = "Hit"
-          cachedResponse.headers.delete("Cache-Control")
-          cachedResponse.headers.delete("x-HTML-Edge-Cache-Status")
-          for (header of CACHE_HEADERS) {
-            let value = cachedResponse.headers.get("x-HTML-Edge-Cache-Header-" + header)
-            if (value) {
-              cachedResponse.headers.delete("x-HTML-Edge-Cache-Header-" + header)
-              cachedResponse.headers.set(header, value)
-            }
-          }
-          response = cachedResponse
-        }
-      } else {
-        status = "Miss"
-      }
-    } catch (err) {
-      // Send the exception back in the response header for debugging
-      status = "Cache Read Exception: " + err.message
-    }
-  }
-
-  return { response, cacheVer, status, bypassCache }
 }
+;((global as unknown) as ServiceWorkerGlobalScope).addEventListener("fetch", event => {
+  ;(event as any).passThroughOnException() // CloudFlare specifig
+  event.respondWith(try_catch_handler(event))
+})

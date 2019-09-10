@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "target": "esnext",
+    "incremental": false,
+    "lib": ["esnext", "dom"],
+    "outDir": "dist"
+  },
+  "outDir": "dist",
+  "exclude": ["node_modules"],
+  "include": ["./worker.ts", "./types.ts", "./const.ts"]
+}

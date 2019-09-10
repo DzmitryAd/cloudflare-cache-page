@@ -5,14 +5,22 @@
   "author": "<palessit.com>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^8.1.0",
     "node-fetch": "^2.6.0",
     "tslib": "^1.10.0",
     "typescript": "^3.6.2"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build:worker:config": "node ./node_modules/typescript/lib/tsc --outDir config/dist -p config/tsconfig.json",
+    "build:worker": "TS_NODE_PROJECT=\"tsconfig.json\" webpack --config ./config/webpack.worker.ts",
+    "worker": "npm link @dollarshaveclub/cloudworker && node config/dist/worker"
   },
   "devDependencies": {
-    "@types/node": "^12.7.4"
+    "@types/node": "^12.7.4",
+    "@types/webpack": "^4.39.1",
+    "ts-loader": "^6.0.4",
+    "ts-node": "^8.3.0",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
   }
 }

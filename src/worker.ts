@@ -23,7 +23,7 @@ const handle = async (event: FetchEvent) => {
   // Bypass processing of image requests (for everything except Firefox which doesn't use image/*)
   const accept = request.headers.get("Accept")
   let isImage = false
-  if (accept && accept.indexOf("image/*") !== -1) {
+  if (accept && accept.includes("image/*")) {
     isImage = true
   }
 
@@ -39,7 +39,7 @@ const handle = async (event: FetchEvent) => {
  * watch for purge responses and possibly cache HTML GET requests.
  */
 const processRequest = async (originalRequest: Request, event: FetchEvent) => {
-  let cfCacheStatus = null
+  let cfCacheStatus: string | null = null
   const accept = originalRequest.headers.get("Accept")
   const isHTML = accept && accept.includes("text/html")
   let { response, cacheVer, status, bypassCache } = await getCachedResponse(originalRequest)

@@ -8,4 +8,5 @@ Usage:
 
 ```sh
 yarn build
+yarn build:worker
 ```

@@ -2,6 +2,8 @@
 
 Service for cache page
 
+Need to bind namespace as WORDPRESS_EDGE_CACHE
+
 Usage:
 
 1. Build js file from ts:

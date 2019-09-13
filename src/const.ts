@@ -2,11 +2,11 @@ import { TCloudflareAPI, TKvStore } from "./types"
 
 export const CACHE_VERSION = "html_cache_version"
 
-export const EDGE_CACHE: TKvStore | undefined = (global as any).WORDPRESS_EDGE_CACHE as TKvStore
+export const EDGE_CACHE: TKvStore | undefined = (global as any).EDGE_CACHE as TKvStore
 
 export const CACHE_HEADERS = ["Cache-Control", "Expires", "Pragma"]
 
-export const DEFAULT_BYPASS_COOKIES = ["wp-", "wordpress", "comment_", "woocommerce_"]
+export const DEFAULT_BYPASS_COOKIES = ["wordpress_logged_in_", "comment_", "woocommerce_"]
 
 // API settings if KV isn't being used
 const CF_EMAIL = "" // From https://dash.cloudflare.com/profile

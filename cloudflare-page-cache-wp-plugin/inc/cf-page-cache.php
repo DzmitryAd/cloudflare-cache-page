@@ -13,10 +13,10 @@ class CfPageCache
 	public function update_cache_version($is_ajax = false)
 	{
 
-		$cf_email = getenv('CF_EMAIL') ? getenv('CF_EMAIL') : "dzmitry@palessit.com";
-		$cf_api_key = getenv('CF_API_KEY') ? getenv('CF_API_KEY') : "04d4f99c3874ce2c99abe787e1365a7dbdbc2";
-		$cf_account_id = getenv('CF_ACCOUNT_ID') ? getenv('CF_ACCOUNT_ID') : "561317714821b0f50684f34b1810faa1";
-		$cf_namespace_id = getenv('CF_NAMESPACE_ID') ? getenv('CF_NAMESPACE_ID') : "a22c7f821ab54bc582992d84b532967f";
+		$cf_email = getenv('CF_EMAIL') ? getenv('CF_EMAIL') : "";
+		$cf_api_key = getenv('CF_API_KEY') ? getenv('CF_API_KEY') : "";
+		$cf_account_id = getenv('CF_ACCOUNT_ID') ? getenv('CF_ACCOUNT_ID') : "";
+		$cf_namespace_id = getenv('CF_NAMESPACE_ID') ? getenv('CF_NAMESPACE_ID') : "";
 
 		$kv_key = self::KV_KEY;
 

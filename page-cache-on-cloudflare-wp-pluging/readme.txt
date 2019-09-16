@@ -1,4 +1,12 @@
 === Page Cache on Cloudflare ===
+Contributors: palessit.com
+Tags: cache,speed,cloudflare
+Author URI: https://palessit.com
+Tested up to: 7.3
+Requires PHP: 7.2
+Version: 1.0
+License: MIT
+
 The fastest cache pages on Cloudflare with purge by button and automatic. You can specify URLs and cookies to exclude caching.
 
 == Description ==

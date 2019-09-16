@@ -1,5 +1,5 @@
 <?php
-class CfPageCache
+class CFPC_Page_Cache
 {
 
   const KV_KEY = "html_cache_version";
@@ -47,7 +47,7 @@ class CfPageCache
     $kv_key = self::KV_KEY;
 
     if ($this->email && $this->api_key && $this->account_id && $this->namespace_id && $kv_key) {
-      $cf_api = new CfAPI($this->email, $this->api_key, $this->account_id);
+      $cf_api = new CFPC_CF_API($this->email, $this->api_key, $this->account_id);
       $cf_kv_value = $cf_api->kv_get_value_by_key($this->namespace_id, $kv_key);
       if ($cf_kv_value || $cf_kv_value == 0) {
         $cf_kv_value++;

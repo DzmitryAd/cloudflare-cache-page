@@ -9,6 +9,5 @@ Usage:
 1. Build js file from ts:
 
 ```sh
-yarn build
 yarn build:worker
 ```

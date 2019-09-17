@@ -32,7 +32,7 @@ Create new Worker KV (eg use namespace name "WORDPRESS_EDGE_CACHE").
 
 Create new Worker Script (eg use name "cache-your_wordpress_site").
 
-![](images/cf-workers-scripts-page-min.png)
+![](images/cf-workers-scripts-page-min-small.png)
 
 Go to Code section in the new script and add code from worker.js file.
 

@@ -1,13 +1,46 @@
-# cloudflare-cache-page
+# Cache HTML Page on Cloudflare by Worker
 
-Service for cache page
+The Service for caching HTML site pages on Cloudflare via Worker. Caching management is performed on the site side through the x-HTML-Edge-Cache header. The project [a link]("https://github.com/cloudflare/worker-examples/tree/master/examples/edge-cache-html") was taken as the basis. The implementation was done in a typed programming language Typescript for the convenience of support and development.
 
-Need to bind namespace as WORDPRESS_EDGE_CACHE
+## Installation
 
-Usage:
+### Build script
 
-1. Build js file from ts:
+Run
 
 ```sh
 yarn build:worker
 ```
+
+or
+
+```sh
+TS_NODE_PROJECT="tsconfig.json" webpack --config ./config/webpack.worker.ts
+```
+
+The script "worker.js" will be in the folder dist.
+
+### Settings Worker on Cloudflare account
+
+Go to Workers section.
+<img src ="images/cf-main-page.png" width="100">
+
+Create new Worker KV (eg use namespace name "WORDPRESS_EDGE_CACHE").
+<img src ="images/cf-workers-main-page-min.png" width="100">
+
+Create new Worker Script (eg use name "cache-your_wordpress_site").
+<img src ="images/cf-workers-scripts-page-min.png" width="100">
+
+Go to Code section in the new script and add code from worker.js file.
+<img src ="images/cf-workers-scripts-resources-code-page-min.png" width="100">
+
+Go to Resources section in the script and add binding: VARIABLE NAME - "EDGE_CACHE", NAMESPACE - "YOUR_CREATED_NAMESPACE" (eg "WORDPRESS_EDGE_CACHE").
+<img src ="images/cf-workers-scripts-resources-page-min.png" width="100">
+<img src ="images/cf-workers-scripts-resources-add-page-min.png" width="100">
+
+Create new Route: Route - "\*your_wordpress_site/\*", Worker - "cache-your_wordpress_site".
+<img src ="images/cf-workers-add-route-page-min.png" width="100">
+
+## Using on sites
+
+To cache HTML pages of your wordpress site, you need to install the wordpress plugin. For details see [a relative link](page-cache-on-cloudflare-wp-plugin/readme.md).

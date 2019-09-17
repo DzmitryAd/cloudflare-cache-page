@@ -26,27 +26,25 @@ Go to Workers section.
 
 ![](images/cf-main-page.png)
 
-<!-- <img src ="images/cf-main-page.png" width="100"> -->
-
 Create new Worker KV (eg use namespace name "WORDPRESS_EDGE_CACHE").
 
-<img src ="images/cf-workers-main-page-min.png" width="100">
+![](images/cf-workers-main-page-min.png)
 
 Create new Worker Script (eg use name "cache-your_wordpress_site").
 
-<img src ="images/cf-workers-scripts-page-min.png" width="100">
+![](images/cf-workers-scripts-page-min.png)
 
 Go to Code section in the new script and add code from worker.js file.
 
-<img src ="images/cf-workers-scripts-resources-code-page-min.png" width="100">
+![](images/cf-workers-scripts-resources-code-page-min.png)
 
 Go to Resources section in the script and add binding: VARIABLE NAME - "EDGE_CACHE", NAMESPACE - "YOUR_CREATED_NAMESPACE" (eg "WORDPRESS_EDGE_CACHE").
 
-<img src ="images/cf-workers-scripts-resources-page-min.png" width="100">
-<img src ="images/cf-workers-scripts-resources-add-page-min.png" width="100">
+![](images/cf-workers-scripts-resources-page-min.png)
+![](images/cf-workers-scripts-resources-add-page-min.png)
 
 Create new Route: Route - "\*your_wordpress_site/\*", Worker - "cache-your_wordpress_site".
-<img src ="images/cf-workers-add-route-page-min.png" width="100">
+![](images/cf-workers-add-route-page-min.png)
 
 ## Using on sites
 

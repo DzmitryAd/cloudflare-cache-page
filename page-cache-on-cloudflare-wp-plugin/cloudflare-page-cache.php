@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:  Page Cache on Cloudflare
-Plugin URI:   https://github.com/palessit/cloudflare-cache-page/tree/master/page-cache-on-cloudflare-wp-pluging
+Plugin URI:   https://github.com/palessit/cloudflare-cache-page/tree/master/page-cache-on-cloudflare-wp-plugin
 Description:  The fastest cache HTML pages on the Cloudflare with purge by button and automatic. You can specify URLs and cookies to exclude caching.
 Version:      1.0.0
 Author:       DzmitryAd, alkononovich

@@ -35,7 +35,7 @@ class CFPC_Admin_Toolbar
 
   public function load_toolbar_css()
   {
-    wp_enqueue_style("cf-page-cache-toolbar", plugins_url("inc/toolbar.css", dirname(__FILE__)), array(), time(), "all");
+    wp_enqueue_style("cfpc-toolbar", plugins_url("inc/toolbar.css", dirname(__FILE__)), array(), time(), "all");
   }
 
   public function cfpc_tweaked_toolbar_on_frontpage()

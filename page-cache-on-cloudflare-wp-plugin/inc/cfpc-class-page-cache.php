@@ -18,13 +18,13 @@ class CFPC_Page_Cache
 
   public function __construct()
   {
-    $this->email = getenv('CF_EMAIL') ? getenv('CF_EMAIL') : self::CF_EMAIL;
-    $this->api_key = getenv('CF_API_KEY') ? getenv('CF_API_KEY') : self::CF_API_KEY;
-    $this->account_id = getenv('CF_ACCOUNT_ID') ? getenv('CF_ACCOUNT_ID') : self::CF_ACCOUNT_ID;
-    $this->namespace_id = getenv('CF_NAMESPACE_ID') ? getenv('CF_NAMESPACE_ID') : self::CF_NAMESPACE_ID;
+    $this->email = getenv('CF_EMAIL') ? sanitize_email(getenv('CF_EMAIL')) : self::CF_EMAIL;
+    $this->api_key = getenv('CF_API_KEY') ? sanitize_key(getenv('CF_API_KEY')) : self::CF_API_KEY;
+    $this->account_id = getenv('CF_ACCOUNT_ID') ? sanitize_key(getenv('CF_ACCOUNT_ID')) : self::CF_ACCOUNT_ID;
+    $this->namespace_id = getenv('CF_NAMESPACE_ID') ? sanitize_key(getenv('CF_NAMESPACE_ID')) : self::CF_NAMESPACE_ID;
 
     $this->non_cacheable_urls = self::NON_CACHEABLE_URLS_DEFAULT;
-    $non_cacheable_urls_extra = getenv('NON_CACHEABLE_URLS_EXTRA') ? getenv('NON_CACHEABLE_URLS_EXTRA') : self::NON_CACHEABLE_URLS_EXTRA;
+    $non_cacheable_urls_extra = getenv('NON_CACHEABLE_URLS_EXTRA') ? sanitize_text_field(getenv('NON_CACHEABLE_URLS_EXTRA')) : self::NON_CACHEABLE_URLS_EXTRA;
     if ($non_cacheable_urls_extra) {
       $array_urls = explode("|", $non_cacheable_urls_extra);
       foreach ($array_urls as $url) {
@@ -33,7 +33,7 @@ class CFPC_Page_Cache
     }
 
     $this->bypass_cookies = self::BYPASS_COOKIES_DEFAULT;
-    $bypass_cookies_extra = getenv('BYPASS_COOKIES_EXTRA') ? getenv('BYPASS_COOKIES_EXTRA') : self::BYPASS_COOKIES_EXTRA;
+    $bypass_cookies_extra = getenv('BYPASS_COOKIES_EXTRA') ? sanitize_text_field(getenv('BYPASS_COOKIES_EXTRA')) : self::BYPASS_COOKIES_EXTRA;
     if ($bypass_cookies_extra) {
       $array_cookies = explode("|", $bypass_cookies_extra);
       foreach ($array_cookies as $cookie) {
@@ -48,12 +48,12 @@ class CFPC_Page_Cache
 
     if ($this->email && $this->api_key && $this->account_id && $this->namespace_id && $kv_key) {
       $cf_api = new CFPC_CF_API($this->email, $this->api_key, $this->account_id);
-      $cf_kv_value = $cf_api->kv_get_value_by_key($this->namespace_id, $kv_key);
+      $cf_kv_value = (int) $cf_api->kv_get_value_by_key($this->namespace_id, $kv_key);
       if ($cf_kv_value || $cf_kv_value == 0) {
         $cf_kv_value++;
         $result = $cf_api->kv_set_value_by_key($this->namespace_id, $kv_key, $cf_kv_value);
         if ($is_ajax) {
-          wp_send_json_success($result['success']);
+          wp_send_json_success(esc_attr($result['success']));
         }
       }
     }
@@ -64,7 +64,7 @@ class CFPC_Page_Cache
 
   function is_non_cacheable_urls()
   {
-    $requestURI = $_SERVER['REQUEST_URI'];
+    $requestURI = sanitize_text_field($_SERVER['REQUEST_URI']);
     foreach ($this->non_cacheable_urls as $url) {
       if (strpos($requestURI, $url) === 0) {
         return true;

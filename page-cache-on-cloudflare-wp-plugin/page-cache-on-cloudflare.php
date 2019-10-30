@@ -16,9 +16,9 @@ if (!defined('WPINC')) {
 }
 
 defined('ABSPATH') or die('No script kiddies please!');
-define('CF_CACHE_PAGE_DIR', plugin_dir_path(__FILE__));
+define('CFPC_CACHE_PAGE_DIR', plugin_dir_path(__FILE__));
 
-foreach (glob(CF_CACHE_PAGE_DIR . 'inc/*.php') as $file) {
+foreach (glob(CFPC_CACHE_PAGE_DIR . 'inc/*.php') as $file) {
   include_once $file;
 }
 

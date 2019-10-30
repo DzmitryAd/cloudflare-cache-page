@@ -8,7 +8,7 @@ class CFPC_Admin_Toolbar
 
   public function update_cache_version_toolbar()
   {
-    $is_ajax = isset($_POST['is_ajax']) ? $_POST['is_ajax'] : false;
+    $is_ajax = isset($_POST['is_ajax']) ? (bool) sanitize_text_field($_POST['is_ajax']) : false;
     $cf_page_cache = new CFPC_Page_Cache();
     $cf_page_cache->update_cache_version($is_ajax);
   }

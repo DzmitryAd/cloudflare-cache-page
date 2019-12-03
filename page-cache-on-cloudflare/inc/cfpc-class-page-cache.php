@@ -90,6 +90,8 @@ class CFPC_Page_Cache
     // Post ID is received
     add_action('save_post', array($this, 'action_update_cache_version_3'), 0, 3);
     add_action('publish_phone', array($this, 'action_update_cache_version'), 0);
+    // Term
+    add_action('edit_term', array($this, 'action_update_cache_version_3'), 0, 3);
     // Coment ID is received
     add_action('trackback_post', array($this, 'action_update_cache_version'), 99);
     add_action('pingback_post', array($this, 'action_update_cache_version'), 99);
@@ -109,7 +111,7 @@ class CFPC_Page_Cache
     header(self::X_HTML_EDGE_CACHE . ': purgeall');
   }
 
-  function action_update_cache_version_3($post_ID, $post, $update)
+  function action_update_cache_version_3($id, $item, $update)
   {
     if ($update) {
       $this->action_update_cache_version();

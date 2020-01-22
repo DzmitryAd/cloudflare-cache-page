@@ -58,4 +58,4 @@ Create new Route: Route - "\*your_wordpress_site/\*", Worker - "cache-your_wordp
 
 ## Using on sites
 
-To cache HTML pages of your wordpress site, you need to install the wordpress plugin. For details see [readme.txt](page-cache-on-cloudflare-wp-plugin/readme.txt).
+To cache HTML pages of your wordpress site, you need to install the wordpress plugin. Please visit: https://wordpress.org/plugins/page-cache-on-cloudflare/. For details see [readme.txt](page-cache-on-cloudflare-wp-plugin/readme.txt).

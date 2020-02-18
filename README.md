@@ -28,29 +28,31 @@ The script "worker.js" will be in the folder dist.
 
 ### Settings Worker on Cloudflare account
 
-Go to Workers section.
+Go to Workers section and press "Manage KV namespaces".
 
-![](images/cf-main-page.png)
+![](images/cf-workers-list-page-min.png)
 
-Create new Worker KV (eg use namespace name "WORDPRESS_EDGE_CACHE").
+Create a new Namespace in Worker KV (eg use namespace name "WORDPRESS_EDGE_CACHE") and press View to edit the new namespace.
 
-![](images/cf-workers-main-page-min.png)
+![](images/cf-manage-kv-namespaces-page-kv-section-min.png)
 
-Create new Worker Script (eg use name "cache-your_wordpress_site").
+Add 2 new entries (key-value) in KV namespace:
+1/ key - html_cache_version, value - 0
+2/ key - preload_cache, value - empty
 
-![](images/cf-workers-scripts-page-min.png)
+![](images/cf-manage-kv-namespaces-page-kv-section-namespace-review-min.png)
 
-Go to Code section in the new script and add code from worker.js file.
+Create new Worker Script (eg use name "cache-your_wordpress_site"). Go Workers section and press "Create a Worker". Add code from worker.js file to Script section and press "Save and Deploy".
 
-![](images/cf-workers-scripts-resources-code-page-min.png)
+![](images/cf-manage-kv-namespaces-page-workers-section-min.png)
 
-Go to Resources section in the script and add binding.
+Configure variables to Worker. Press "Edit variables" on new Worker review page.
 
-![](images/cf-workers-scripts-resources-page-min.png)
+![](images/cf-manage-kv-namespaces-page-worker-review-min.png)
 
-Use VARIABLE NAME - "EDGE_CACHE", NAMESPACE - "YOUR_CREATED_NAMESPACE" (eg "WORDPRESS_EDGE_CACHE").
+Set variable name - "EDGE_CACHE", KV namespace - "YOUR_CREATED_NAMESPACE" (eg "WORDPRESS_EDGE_CACHE")
 
-![](images/cf-workers-scripts-resources-add-page-min.png)
+![](images/cf-manage-kv-namespaces-page-worker-review-edit-variables-min.png)
 
 Create new Route: Route - "\*your_wordpress_site/\*", Worker - "cache-your_wordpress_site".
 

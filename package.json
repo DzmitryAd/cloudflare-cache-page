@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.1.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "tslib": "^1.10.0",
     "typescript": "^3.6.2"
   },
